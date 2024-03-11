@@ -83,7 +83,7 @@ cat <<'TABLE_HEADER'
   </thead>
 TABLE_HEADER
 
-for row in "${!live_timestamp_code_row_list[@]}"; do
+for row in "${live_timestamp_code_row_list[@]}"; do
   echo "${row}"
 done
 
