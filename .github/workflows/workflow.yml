@@ -25,8 +25,19 @@ jobs:
             --output '${{ env.downloaded_json_file_name }}' \
             --show-error \
             --silent \
+            -H 'authority: mixch.tv' \
+            -H 'accept: */*' \
+            -H 'accept-language: en-US,en;q=0.9' \
+            -H 'cache-control: no-cache' \
+            -H 'pragma: no-cache' \
             -H 'referer: https://mixch.tv/liveview/list' \
-            -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36' \
+            -H 'sec-ch-ua: "Chromium";v="122", "Not(A:Brand";v="24", "Microsoft Edge";v="122"' \
+            -H 'sec-ch-ua-mobile: ?0' \
+            -H 'sec-ch-ua-platform: "Windows"' \
+            -H 'sec-fetch-dest: empty' \
+            -H 'sec-fetch-mode: cors' \
+            -H 'sec-fetch-site: same-origin' \
+            -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0' \
             'https://mixch.tv/api-web/liveview/list'
           cat '${{ env.downloaded_json_file_name }}'
 
