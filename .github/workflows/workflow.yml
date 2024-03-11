@@ -1,0 +1,71 @@
+name: Workflow
+on:
+  workflow_dispatch:
+  schedule:
+    # "At 11:01."
+    #   https://crontab.guru/#1_11_*_*_*
+    - cron: "1 11 * * *"
+
+jobs:
+  fetch_publish:
+    name: Fetch and publish
+    runs-on: ubuntu-latest
+    env:
+      downloaded_json_file_name: "event_list.json"
+      generated_markdown_file_name: "upcoming_live.md"
+    steps:
+      - uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 1
+
+      - name: Fetch event info from mixch.tv
+        run: |
+          set -e
+          curl \
+            --output '${{ env.downloaded_json_file_name }}' \
+            --show-error \
+            --silent \
+            -H 'referer: https://mixch.tv/liveview/list' \
+            -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36' \
+            'https://mixch.tv/api-web/liveview/list'
+
+      - name: Process data
+        run: |
+          set -e
+          1>'${{ env.generated_markdown_file_name }}' \
+            bash \
+              ./the_script.sh \
+                '432000' \
+                '${{ env.downloaded_json_file_name }}'
+
+      - name: Read ${{ env.generated_markdown_file_name }}
+        id: read_result_file
+        uses: juliangruber/read-file-action@v1.1.7
+        with:
+          path: ${{ env.generated_markdown_file_name }}
+
+      - name: What time?
+        id: my_luminous_watch
+        uses: josStorer/get-current-time@v2.1.2
+        with:
+          format: "YYYYMMDDHHmmss"
+
+      - name: Upload artifact "${{ env.downloaded_json_file_name }}"
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: ${{ steps.my_luminous_watch.outputs.formattedTime }}_${{ env.downloaded_json_file_name }}
+          path: ${{ env.downloaded_json_file_name }}
+
+      - name: Upload artifact "${{ env.generated_markdown_file_name }}"
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: ${{ steps.my_luminous_watch.outputs.formattedTime }}_${{ env.generated_markdown_file_name }}
+          path: ${{ env.generated_markdown_file_name }}
+
+      - name: Publish a release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          name: "Upcoming live: ${{ steps.my_luminous_watch.outputs.readableTime }}"
+          tag: ${{ steps.my_luminous_watch.outputs.formattedTime }}
+          artifacts: "${{ env.generated_markdown_file_name }}"
+          body: ${{ steps.read_result_file.outputs.content }}
