@@ -32,7 +32,7 @@ while read -r event_info; do
 
   echo "processing [${id}]" >/dev/stderr
 
-  if [[ ${now_second} -lt ${close_timestamp} ]]; then
+  if [[ ${now_second} -gt ${close_timestamp} ]]; then
     echo -e '\t''ignored' >/dev/stderr
     continue
   fi

@@ -6,6 +6,9 @@ on:
     #   https://crontab.guru/#1_11_*_*_*
     - cron: "1 11 * * *"
 
+permissions:
+  contents: write
+
 jobs:
   fetch_publish:
     name: Fetch and publish
