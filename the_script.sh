@@ -20,7 +20,7 @@ limit_second=$((${now_second} + ${offset_second}))
 
 # collect live
 
-declare -A live_timestamp_code_row_map
+declare -a live_timestamp_code_row_list
 
 while read -r event_info; do
   id="$(jq --raw-output '.id' <<<"${event_info}")"
@@ -45,8 +45,7 @@ while read -r event_info; do
     thumbnail_element='<i>no thumbnail</i>'
   fi;
 
-  key="${id}"
-  value="$(
+  row="$(
     cat <<-TABLE_ROW
 		  <tr>
 		    <td>${close_datetime}</td>
@@ -62,13 +61,13 @@ while read -r event_info; do
 		  </tr>
 		TABLE_ROW
   )"
-  live_timestamp_code_row_map["${key}"]="${value}"
+  live_timestamp_code_row_list+=("${row}")
 
   echo -e '\t''collected' >/dev/stderr
 
 done < <(<"${event_list_json}" jq --compact-output '.liveviews | sort_by( .liveCloseUnixTime ) | .[]')
 
-echo "count of incoming live = ${#live_timestamp_code_row_map[@]}" >/dev/stderr
+echo "count of incoming live = ${#live_timestamp_code_row_list[@]}" >/dev/stderr
 
 
 # draw table
@@ -84,8 +83,8 @@ cat <<'TABLE_HEADER'
   </thead>
 TABLE_HEADER
 
-for key in "${!live_timestamp_code_row_map[@]}"; do
-  echo "${live_timestamp_code_row_map["${key}"]}"
+for row in "${!live_timestamp_code_row_list[@]}"; do
+  echo "${row}"
 done
 
 echo '</table>'
