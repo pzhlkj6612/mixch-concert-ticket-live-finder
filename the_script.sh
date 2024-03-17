@@ -80,7 +80,7 @@ echo '<table>'
 cat <<'TABLE_HEADER'
   <thead>
     <th>START (UTC)</th>
-    <th>END (UTC)</th>
+    <th>END (UTC) ↓</th>
     <th>Thumbnail, URL & Title</th>
     <th>Minimal price</th>
     <th>Archive?</th>
