@@ -10,7 +10,7 @@ jq --version >/dev/stderr
 
 
 offset_second="$1"
-event_list_json="$2"
+event_list_json="$2"  # https://mixch.tv/api-web/liveview/list
 
 file "${event_list_json}" >/dev/stderr
 
@@ -27,6 +27,7 @@ while read -r event_info; do
   name="$(jq --raw-output '.name' <<<"${event_info}")"
   thumbnail_url="$(jq --raw-output '.thumbnailUrl' <<<"${event_info}")"
   min_price="$(jq --raw-output '.minPrice' <<<"${event_info}")"
+  open_timestamp="$(jq --raw-output '.liveOpenUnixTime' <<<"${event_info}")"
   close_timestamp="$(jq --raw-output '.liveCloseUnixTime' <<<"${event_info}")"
   archive="$(jq --raw-output '.archive' <<<"${event_info}")"
 
@@ -48,6 +49,7 @@ while read -r event_info; do
   row="$(
     cat <<-TABLE_ROW
 		  <tr>
+		    <td>${open_timestamp}</td>
 		    <td>${close_datetime}</td>
 		    <td>
 		      <a href="https://mixch.tv/liveview/${id}/detail">${id}</a>
@@ -76,6 +78,7 @@ echo '<table>'
 
 cat <<'TABLE_HEADER'
   <thead>
+    <th>START (UTC)</th>
     <th>END (UTC)</th>
     <th>Thumbnail, URL & Title</th>
     <th>Minimal price</th>
