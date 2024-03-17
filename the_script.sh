@@ -38,6 +38,7 @@ while read -r event_info; do
     continue
   fi
 
+  open_datetime="$(date --date="@${open_timestamp}" '+%Y-%m-%d %H:%M:%S')"
   close_datetime="$(date --date="@${close_timestamp}" '+%Y-%m-%d %H:%M:%S')"
 
   if [[ "${thumbnail_url}" != 'null' ]]; then
@@ -49,7 +50,7 @@ while read -r event_info; do
   row="$(
     cat <<-TABLE_ROW
 		  <tr>
-		    <td>${open_timestamp}</td>
+		    <td>${open_datetime}</td>
 		    <td>${close_datetime}</td>
 		    <td>
 		      <a href="https://mixch.tv/liveview/${id}/detail">${id}</a>
