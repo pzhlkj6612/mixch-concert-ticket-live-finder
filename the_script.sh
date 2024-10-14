@@ -4,6 +4,7 @@
 set -e
 set -o pipefail
 set -u
+set -x
 
 
 jq --version >/dev/stderr
