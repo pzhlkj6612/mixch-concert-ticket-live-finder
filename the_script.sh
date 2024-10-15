@@ -49,21 +49,21 @@ while read -r event_info; do
   fi;
 
   row="$(
-    cat <<-TABLE_ROW
-		  <tr>
-		    <td>${open_datetime}</td>
-		    <td>${close_datetime}</td>
-		    <td>
-		      <a href="https://mixch.tv/liveview/${id}/detail">${id}</a>
-		      <br>
-		      ${thumbnail_element}
-		      <br>
-		      ${name}
-		    </td>
-		    <td>${min_price}</td>
-		    <td>${archive}</td>
-		  </tr>
-		TABLE_ROW
+    cat <<TABLE_ROW
+      <tr>
+        <td>${open_datetime}</td>
+        <td>${close_datetime}</td>
+        <td>
+          <a href="https://mixch.tv/liveview/${id}/detail">${id}</a>
+          <br>
+          ${thumbnail_element}
+          <br>
+          ${name}
+        </td>
+        <td>${min_price}</td>
+        <td>${archive}</td>
+      </tr>
+TABLE_ROW
   )"
   live_timestamp_code_row_list+=("${row}")
 
