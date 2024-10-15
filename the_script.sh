@@ -50,19 +50,19 @@ while read -r event_info; do
 
   row="$(
     cat <<TABLE_ROW
-      <tr>
-        <td>${open_datetime}</td>
-        <td>${close_datetime}</td>
-        <td>
-          <a href="https://mixch.tv/liveview/${id}/detail">${id}</a>
-          <br>
-          ${thumbnail_element}
-          <br>
-          ${name}
-        </td>
-        <td>${min_price}</td>
-        <td>${archive}</td>
-      </tr>
+<tr>
+  <td>${open_datetime}</td>
+  <td>${close_datetime}</td>
+  <td>
+    <a href="https://mixch.tv/liveview/${id}/detail">${id}</a>
+    <br>
+    ${thumbnail_element}
+    <br>
+    ${name}
+  </td>
+  <td>${min_price}</td>
+  <td>${archive}</td>
+</tr>
 TABLE_ROW
   )"
   live_timestamp_code_row_list+=("${row}")
@@ -79,13 +79,13 @@ echo "count of incoming live = ${#live_timestamp_code_row_list[@]}" >/dev/stderr
 echo '<table>'
 
 cat <<'TABLE_HEADER'
-  <thead>
-    <th>START (UTC)</th>
-    <th>END (UTC) ↓</th>
-    <th>Thumbnail, URL & Title</th>
-    <th>Minimal price</th>
-    <th>Archive?</th>
-  </thead>
+<thead>
+  <th>START (UTC)</th>
+  <th>END (UTC) ↓</th>
+  <th>Thumbnail, URL & Title</th>
+  <th>Minimal price</th>
+  <th>Archive?</th>
+</thead>
 TABLE_HEADER
 
 for row in "${live_timestamp_code_row_list[@]}"; do
