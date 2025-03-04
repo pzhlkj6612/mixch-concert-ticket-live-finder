@@ -2,9 +2,9 @@ name: Workflow
 on:
   workflow_dispatch:
   schedule:
-    # "At 11:01."
-    #   https://crontab.guru/#1_11_*_*_*
-    - cron: "1 11 * * *"
+    # "At 17:01."
+    #   https://crontab.guru/#1_17_*_*_*
+    - cron: "1 17 * * *"
 
 permissions:
   contents: write
