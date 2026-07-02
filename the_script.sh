@@ -21,7 +21,7 @@ limit_second=$((${now_second} + ${offset_second}))
 
 # collect live
 
-declare -a live_timestamp_code_row_list
+declare -a live_timestamp_code_row_list=()
 
 while read -r event_info; do
   id="$(jq --raw-output '.id' <<<"${event_info}")"
@@ -88,8 +88,16 @@ cat <<'TABLE_HEADER'
 </thead>
 TABLE_HEADER
 
-for row in "${live_timestamp_code_row_list[@]}"; do
-  echo "${row}"
-done
+if [[ ${#live_timestamp_code_row_list[@]} -gt 0 ]]; then
+  for row in "${live_timestamp_code_row_list[@]}"; do
+    echo "${row}"
+  done
+else
+  echo '<tr>'
+  for i in $(seq 5); do
+    echo '<td>none</td>'
+  done
+  echo '</tr>'
+fi
 
 echo '</table>'
