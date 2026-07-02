@@ -11,9 +11,33 @@ jq --version >/dev/stderr
 
 
 offset_second="$1"
-event_list_json="$2"  # https://mixch.tv/api-web/liveview/list
+data_file="$2"
 
-file "${event_list_json}" >/dev/stderr
+
+# download data
+
+curl \
+  --output "${data_file}" \
+  --show-error \
+  --silent \
+  -H 'authority: mixch.tv' \
+  -H 'accept: */*' \
+  -H 'accept-language: en-US,en;q=0.9' \
+  -H 'cache-control: no-cache' \
+  -H 'pragma: no-cache' \
+  -H 'sec-ch-ua: "Chromium";v="122", "Not(A:Brand";v="24", "Microsoft Edge";v="122"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Windows"' \
+  -H 'sec-fetch-dest: document' \
+  -H 'sec-fetch-mode: navigate' \
+  -H 'sec-fetch-site: cross-site' \
+  -H 'sec-fetch-user: ?1' \
+  -H 'upgrade-insecure-requests: 1' \
+  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0' \
+  'https://mixch.tv/api-web/liveview/list'
+
+cat "${data_file}" >/dev/stderr
+file "${data_file}" >/dev/stderr
 
 now_second=$(date '+%s')
 limit_second=$((${now_second} + ${offset_second}))
@@ -69,7 +93,7 @@ TABLE_ROW
 
   echo -e '\t''collected' >/dev/stderr
 
-done < <(<"${event_list_json}" jq --compact-output '.liveviews | sort_by( .liveCloseUnixTime ) | .[]')
+done < <(<"${data_file}" jq --compact-output '.liveviews | sort_by( .liveCloseUnixTime ) | .[]')
 
 echo "count of incoming live = ${#live_timestamp_code_row_list[@]}" >/dev/stderr
 
